@@ -1,0 +1,7 @@
+INFO: System started at 08:00
+ERROR: Failed to load configuration
+INFO: User logged in
+WARNING: Low disk space
+ERROR: Could not connect to database
+INFO: Scheduled task completed
+ERROR: Timeout while waiting for response
