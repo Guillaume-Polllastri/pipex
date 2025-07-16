@@ -1,3 +1,0 @@
-ERROR: Could not connect to database
-ERROR: Failed to load configuration
-ERROR: Timeout while waiting for response

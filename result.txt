@@ -1,3 +1,0 @@
-INFO: Scheduled task completed
-INFO: System started at 08:00
-INFO: User logged in
