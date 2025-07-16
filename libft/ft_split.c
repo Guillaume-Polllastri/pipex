@@ -6,13 +6,13 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:27:46 by gpollast          #+#    #+#             */
-/*   Updated: 2025/05/07 10:09:14 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:01:46 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_word(char const *s, char c)
+static int	count_word(char const *s, char *charset)
 {
 	int	i;
 	int	in_word;
@@ -23,34 +23,34 @@ static int	count_word(char const *s, char c)
 	count = 0;
 	while (s[i])
 	{
-		if (s[i] != c && in_word == 0)
+		if (!ft_strchr(charset, s[i]) && in_word == 0)
 		{
 			in_word = 1;
 			count++;
 		}
-		else if (s[i] == c)
+		else if (ft_strchr(charset, s[i]))
 			in_word = 0;
 		i++;
 	}
 	return (count);
 }
 
-static int	get_start(char const *s, char c, int sep)
+static int	get_start(char const *s, char *charset, int sep)
 {
 	while (s[sep])
 	{
-		if (c != s[sep])
+		if (!ft_strchr(charset, s[sep]))
 			return (sep);
 		sep++;
 	}
 	return (sep);
 }
 
-static int	get_sep(char const *s, char c, int start)
+static int	get_sep(char const *s, char *charset, int start)
 {
 	while (s[start])
 	{
-		if (c == s[start])
+		if (ft_strchr(charset, s[start]))
 			return (start);
 		start++;
 	}
@@ -71,7 +71,7 @@ static char	**free_words(char **res)
 	return (NULL);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char *charset)
 {
 	char	**res;
 	int		words;
@@ -81,7 +81,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	words = count_word(s, c);
+	words = count_word(s, charset);
 	res = (char **) ft_calloc(words + 1, sizeof(char *));
 	if (!res)
 		return (NULL);
@@ -90,8 +90,8 @@ char	**ft_split(char const *s, char c)
 	sep = 0;
 	while (i < words)
 	{
-		start = get_start(s, c, sep);
-		sep = get_sep(s, c, start);
+		start = get_start(s, charset, sep);
+		sep = get_sep(s, charset, start);
 		res[i] = ft_substr(s, start, sep - start);
 		if (!res[i])
 			return (free_words(res));

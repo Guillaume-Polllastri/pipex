@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 10:55:01 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/16 15:51:26 by gpollast         ###   ########.fr       */
+/*   Created: 2025/07/16 14:08:53 by gpollast          #+#    #+#             */
+/*   Updated: 2025/07/16 15:52:23 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-char	*cmd_path(char *cmd);
+char	*cmd_path(char *cmd)
+{
+	char	**res;
+	char	*path;
 
-#endif
+	res = ft_split(cmd, " \t");
+	if (!res)
+		return (NULL);
+	path = ft_strjoin("/bin/", res[0]);
+	if (!path)
+		return (NULL);
+	free_string_array(res);
+	return (path);
+}

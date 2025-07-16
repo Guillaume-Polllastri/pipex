@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/15 17:50:01 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:54:45 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,10 @@ int	main(int ac, char **av)
 	pid_t	pid1;
 	pid_t	pid2;
 	int		status;
-	int		fd;
 	int		pipefd[2];
-	char	*args[3];
-	char	*args2[3];
+	char	*path;
+	char	**cmd;
 
-	args[0] = "ls";
-	args[1] = "-la";
-	args[2] = NULL;
-	args2[0] = "wc";
-	args2[1] = "-l";
-	args2[2] = NULL;
 	if (ac == 5)
 	{
 		if (pipe(pipefd) == -1)
@@ -42,24 +35,43 @@ int	main(int ac, char **av)
 			perror("pipe");
 			return (1);
 		}
-		fd = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd < 0)
-			return (0);
-		write(fd, "rondelle", 8);
-		close (fd);
 		pid1 = fork();
-		if (pid1 > 0)
+		if (pid1 == 0)
 		{
-			printf("PID Enfant 1: %d\n", pid1);
-			execve("/bin/ls", args, NULL);
+			printf("PID Enfant 1: %d\n", getpid());
+			close(pipefd[0]);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+			path = cmd_path(av[2]);
+			cmd = ft_split(av[2], " \t");
+			execve(path, cmd, NULL);
+			perror("Error\nEnfant 1 Invalid command ");
+			return (1);
 		}
+		waitpid(pid1, &status, 0);
+		printf("Enfant 1 terminé\n");
 		pid2 = fork();
-		if (pid2 > 0)
+		if (pid2 == 0)
 		{
-			printf("PID Enfant 2: %d\n", pid2);
-			execve("/bin/wc", args2, NULL);
-			return (ft_strncmp(av[1], av[2], ft_strlen(av[1])));
+			printf("PID Enfant 2: %d\n", getpid());
+			close(pipefd[1]);
+			dup2(pipefd[0], STDIN_FILENO);
+			close(pipefd[0]);
+			path = cmd_path(av[3]);
+			cmd = ft_split(av[3], " \t");
+			execve(path, cmd, NULL);
+			perror("Error\nEnfant 2 Invalid command ");
+			return (1);
 		}
+		close(pipefd[0]);
+		close(pipefd[1]);
+		waitpid(pid2, &status, 0);
+		printf("Enfant 2 terminé\n");
+		printf("Les deux Enfants ont été crées\n");
+		return (0);
 	}
+	printf("Error\nThe program needs 4 arguments\n");
+	// free(path);
+	// free_string_array(cmd);
 	return (0);
 }

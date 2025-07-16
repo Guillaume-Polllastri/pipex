@@ -6,7 +6,7 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/27 20:41:38 by gpollast          #+#    #+#              #
-#    Updated: 2025/05/07 15:53:37 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/16 15:25:41 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = cc
 AR = ar
 CFLAGS = -Wall -Werror -Wextra
 
-SRCS =				ft_isalpha.c \
+SRCS =			ft_isalpha.c \
 				ft_isdigit.c \
 				ft_isalnum.c \
 				ft_isascii.c \
@@ -48,7 +48,9 @@ SRCS =				ft_isalpha.c \
 				ft_putchar_fd.c \
 				ft_putstr_fd.c \
 				ft_putendl_fd.c \
-				ft_putnbr_fd.c
+				ft_putnbr_fd.c \
+				free_memory.c \
+				stack.c
 
 OBJS = $(SRCS:.c=.o)
 
