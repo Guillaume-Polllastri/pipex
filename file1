@@ -1,0 +1,9 @@
+Info: Starting the server.
+Info: Loading configuration from config.yaml
+Error Failed to bind to port 8080
+Info: Retrying connection...
+Error Timeout while connecting to database
+Info: Connection successful.
+Info: Listening for incoming requests.
+Error Unexpected token in JSON
+Info: Graceful shutdown initiated.
