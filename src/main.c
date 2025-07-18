@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/18 12:17:51 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/18 19:57:15 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,80 +19,91 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-static void	child1(pid_t pid, int *pipefd, char **av)
+static void	find_cmd(t_child *child, char **av, int index)
 {
-	char	*path;
-	char	**cmd;
-	int		fd;
+	child->path_cmd = cmd_path(av[index]);
+	child->cmd = ft_split(av[index], " \t");
+}
 
-	if (pid == 0)
+static void	execute_cmd(t_child *child)
+{
+	if (child->pid == 0)
 	{
-		close(pipefd[0]);
-		fd = open(av[1], O_RDONLY);
-		if (fd == -1)
-			exit(1);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		path = cmd_path(av[2]);
-		cmd = ft_split(av[2], " \t");
-		execve(path, cmd, NULL);
-		perror("Error\nEnfant 1 Invalid command ");
+		dup2(child->in, STDIN_FILENO);
+		close(child->in);
+		dup2(child->out, STDOUT_FILENO);
+		close(child->out);
+		execve(child->path_cmd, child->cmd, NULL);
+		perror("Error\nCommand is invalid ");
 		exit(EXIT_FAILURE);
 	}
 }
 
-static void	child2(pid_t pid, int *pipefd, char **av)
+static void	parent(char **av, int nb_cmd, int file2)
 {
-	char	*path;
-	char	**cmd;
-	int		fd;
+	t_child	*child;
+	t_pipe	*pipefd;
+	int		i;
 
-	if (pid == 0)
+	child = malloc(sizeof(t_child) * nb_cmd);
+	pipefd = malloc(sizeof(t_pipe) * (nb_cmd - 1));
+	i = 0;
+	while (i < (nb_cmd - 1))
 	{
-		close(pipefd[1]);
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
-		fd = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd == -1)
-			exit(1);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		path = cmd_path(av[3]);
-		cmd = ft_split(av[3], " \t");
-		execve(path, cmd, NULL);
-		perror("Error\nEnfant 2 Invalid command ");
-		exit(EXIT_FAILURE);
+		if (pipe(pipefd[i].fd) == -1)
+			return (perror("pipe"));
+		i++;
 	}
+	i = 0;
+	while (i < nb_cmd)
+	{
+		child[i].pid = fork();
+		if (child[i].pid == -1)
+			return (perror("fork"));
+		if (i == 0)
+		{
+			child[i].in = open(av[1], O_RDONLY);
+			child[i].out = pipefd[i].fd[1];
+			find_cmd(&child[i], av, i + 2);
+			execute_cmd(&child[i]);
+			close(pipefd[i].fd[1]);
+		}
+		else if (i == (nb_cmd - 1))
+		{
+			child[i].in = pipefd[i - 1].fd[0];
+			child[i].out = open(av[file2], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			find_cmd(&child[i], av, i + 2);
+			execute_cmd(&child[i]);
+			close(pipefd[i - 1].fd[0]);
+		}
+		else
+		{
+			child[i].in = pipefd[i - 1].fd[0];
+			child[i].out = pipefd[i].fd[1];
+			find_cmd(&child[i], av, i + 2);
+			execute_cmd(&child[i]);
+			close(pipefd[i - 1].fd[0]);
+			close(pipefd[i].fd[1]);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < nb_cmd)
+	{
+		waitpid(child[i].pid, &child[i].status, 0);
+		printf("Enfant a terminé avec status : %d\n", child[i].status);
+		i++;
+	}
+	printf("Les Enfants ont été crées\n");
+	free(child);
+	free(pipefd);
 }
 
 int	main(int ac, char **av)
 {
-	pid_t	pid1;
-	pid_t	pid2;
-	int		status;
-	int		pipefd[2];
-
-	if (ac == 5)
+	if (ac >= 5)
 	{
-		if (pipe(pipefd) == -1)
-			return (perror("pipe"), 1);
-		pid1 = fork();
-		if (pid1 == -1)
-			return (perror("fork"), 1);
-		child1(pid1, pipefd, av);
-		pid2 = fork();
-		if (pid2 == -1)
-			return (perror("fork"), 1);
-		child2(pid2, pipefd, av);
-		close(pipefd[1]);
-		close(pipefd[0]);
-		waitpid(pid1, &status, 0);
-		printf("Enfant 1 terminé avec status : %d\n", status);
-		waitpid(pid2, &status, 0);
-		printf("Enfant 2 terminé avec status : %d\n", status);
-		printf("Les deux Enfants ont été crées\n");
+		parent(av, ac - 3, ac - 1);
 		return (0);
 	}
 	printf("Error\nThe program needs 4 arguments\n");
