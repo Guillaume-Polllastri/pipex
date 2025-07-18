@@ -6,15 +6,14 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/04 10:53:47 by gpollast          #+#    #+#              #
-#    Updated: 2025/07/17 16:09:16 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/18 12:18:17 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
 SRC = 	src/main.c \
-		src/parse.c \
-		src/get_next_line.c
+		src/parse.c
 
 OBJ = $(SRC:.c=.o)
 

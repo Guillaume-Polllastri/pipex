@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/18 11:45:53 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:17:51 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "get_next_line.h"
 
 static void	child1(pid_t pid, int *pipefd, char **av)
 {
@@ -78,23 +77,14 @@ int	main(int ac, char **av)
 	if (ac == 5)
 	{
 		if (pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			return (1);
-		}
+			return (perror("pipe"), 1);
 		pid1 = fork();
 		if (pid1 == -1)
-		{
-			perror("fork");
-			return (1);
-		}
+			return (perror("fork"), 1);
 		child1(pid1, pipefd, av);
 		pid2 = fork();
 		if (pid2 == -1)
-		{
-			perror("fork");
-			return (1);
-		}
+			return (perror("fork"), 1);
 		child2(pid2, pipefd, av);
 		close(pipefd[1]);
 		close(pipefd[0]);
