@@ -6,7 +6,7 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/04 10:53:47 by gpollast          #+#    #+#              #
-#    Updated: 2025/07/21 09:58:05 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/21 13:31:49 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,18 +14,22 @@ NAME = pipex
 
 SRC = 	src/main.c \
 		src/parse.c \
-		src/get_next_line.c
+		src/process.c \
+		src/fork.c
 
 OBJ = $(SRC:.c=.o)
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -I./includes -I./libft -g
-LDFLAGS = -L./libft -lft
+CFLAGS = -Wall -Werror -Wextra -I./includes -I./libft -I./ft_printf -g
+LDFLAGS = -L./libft -lft -L./ft_printf -lftprintf
 
-all: libft/libft.a $(NAME)
+all: libft/libft.a ft_printf/libftprintf.a $(NAME)
 
 libft/libft.a:
 	@$(MAKE) -C libft
+
+ft_printf/libftprintf.a:
+	@$(MAKE) -C ft_printf
 
 val:
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME) $(ARGS) || true
@@ -37,11 +41,13 @@ $(NAME): $(OBJ)
 clean:
 	@rm -f $(OBJ)
 	@$(MAKE) -C libft clean
-	@echo "Suppression des fichiers objets (project + libft)"
+	@$(MAKE) -C ft_printf clean
+	@echo "Suppression des fichiers objets (project + libft + ft_printf)"
 
 fclean: clean
 	@rm -f $(NAME)
 	@$(MAKE) -C libft fclean
-	@echo "Suppression de l'exécutable et de la librairie"
+	@$(MAKE) -C ft_printf fclean
+	@echo "Suppression de l'exécutable et des librairies"
 
 re: fclean all
