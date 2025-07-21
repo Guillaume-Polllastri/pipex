@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 14:11:49 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:42:30 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **env)
 {
 	t_info	*info;
 
@@ -31,15 +31,17 @@ int	main(int ac, char **av)
 			return (0);
 		info->arg = av;
 		info->last_file = ac - 1;
+		info->env = env;
 		if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) && ac >= 6)
 		{
 			info->nb_cmd = ac - 4;
 			info->index_cmd = 3;
-			parent(info);
-			return (0);
 		}
-		info->nb_cmd = ac - 3;
-		info->index_cmd = 2;
+		else
+		{
+			info->nb_cmd = ac - 3;
+			info->index_cmd = 2;
+		}
 		parent(info);
 		free(info);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:55:01 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 20:10:23 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:41:23 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_info
 	int		nb_cmd;
 	int		last_file;
 	int		index_cmd;
+	char	**env;
 }	t_info;
 
 typedef struct s_pipe

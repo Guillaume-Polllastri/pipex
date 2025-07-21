@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 20:30:41 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:43:56 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	execute_cmd(t_child *child, t_info *info)
 		if (child->path_cmd)
 		{
 			fprintf(stderr, "execute child %s\n", child->path_cmd);
-			execve(child->path_cmd, child->cmd, NULL);
+			execve(child->path_cmd, child->cmd, info->env);
 		}
 		else
 		{
@@ -81,7 +81,7 @@ static t_child	*setup_childs(t_info *info)
 	t_child	*children;
 	int		i;
 
-	children = malloc(sizeof(t_child) * info->nb_cmd + 1);
+	children = malloc(sizeof(t_child) * (info->nb_cmd + 1));
 	ft_bzero(&children[0], sizeof(*children));
 	if (!ft_strncmp(info->arg[1], "here_doc", ft_strlen(info->arg[1])))
 		children[0].f = execute_heredoc;

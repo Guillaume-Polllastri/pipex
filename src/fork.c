@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 13:28:12 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 20:13:13 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:38:24 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,15 @@ void	create_processes(t_child *child, t_pipe *pipefd, t_info *info)
 			return (perror("fork"));
 		if (i == 0)
 			setup_first_process(child, pipefd, info, i);
-		else if (i == (info->nb_cmd - 1))
+		else if (i == (info->nb_cmd))
 			setup_last_process(child, pipefd, info, i);
 		else
 			setup_middle_process(child, pipefd, info, i);
+		if (child[i].pid != 0)
+		{
+			close(child[i].in);
+			close(child[i].out);
+		}
 		info->index_cmd++;
 		i++;
 	}
