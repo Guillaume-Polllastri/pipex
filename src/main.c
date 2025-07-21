@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/18 19:57:15 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/21 10:01:16 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ static void	execute_cmd(t_child *child)
 	}
 }
 
+static void	free_child(t_child *child)
+{
+	free(child->path_cmd);
+	free_string_array(child->cmd);
+}
+
 static void	parent(char **av, int nb_cmd, int file2)
 {
 	t_child	*child;
@@ -66,6 +72,7 @@ static void	parent(char **av, int nb_cmd, int file2)
 			child[i].out = pipefd[i].fd[1];
 			find_cmd(&child[i], av, i + 2);
 			execute_cmd(&child[i]);
+			free_child(&child[i]);
 			close(pipefd[i].fd[1]);
 		}
 		else if (i == (nb_cmd - 1))
@@ -74,6 +81,7 @@ static void	parent(char **av, int nb_cmd, int file2)
 			child[i].out = open(av[file2], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			find_cmd(&child[i], av, i + 2);
 			execute_cmd(&child[i]);
+			free_child(&child[i]);
 			close(pipefd[i - 1].fd[0]);
 		}
 		else
@@ -82,6 +90,7 @@ static void	parent(char **av, int nb_cmd, int file2)
 			child[i].out = pipefd[i].fd[1];
 			find_cmd(&child[i], av, i + 2);
 			execute_cmd(&child[i]);
+			free_child(&child[i]);
 			close(pipefd[i - 1].fd[0]);
 			close(pipefd[i].fd[1]);
 		}
@@ -103,6 +112,11 @@ int	main(int ac, char **av)
 {
 	if (ac >= 5)
 	{
+		if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
+		{
+			printf("toto\n");
+			return (0);
+		}
 		parent(av, ac - 3, ac - 1);
 		return (0);
 	}
