@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 13:28:12 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 20:38:24 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/22 19:00:22 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,12 @@ static void	setup_last_process(t_child *child, t_pipe *pipefd, t_info *info,
 		int i)
 {
 	child[i].in = pipefd[i - 1].fd[0];
-	child[i].out = open(info->arg[info->last_file],
-			O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (!ft_strncmp(info->arg[1], "here_doc", ft_strlen(info->arg[1])))
+		child[i].out = open(info->arg[info->last_file],
+				O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else
+		child[i].out = open(info->arg[info->last_file],
+				O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (child[i].out == -1)
 	{
 		perror("Error opening output file");

@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 14:08:53 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 16:23:18 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 00:07:16 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,34 +67,26 @@ char	*path_env(char *str, char *cmd)
 {
 	char	**path_lst;
 	char	*path;
-	int 	len;
+	int		len;
 	int		i;
 
 	path_lst = ft_split(str, ":");
 	if (!path_lst)
 		return (NULL);
-	i = 0;
-	while (path_lst[i])
+	i = -1;
+	while (path_lst[++i])
 	{
-		len = ft_strlen(path_lst[i]) + 1 + ft_strlen(cmd) + 1;
+		len = ft_strlen(path_lst[i]) + ft_strlen(cmd) + 2;
 		path = malloc(sizeof(char) * len);
 		if (!path)
-		{
-			free_string_array(path_lst);
-			return (NULL);
-		}
+			return (free_string_array(path_lst), NULL);
 		ft_bzero(path, len);
 		ft_strlcat(path, path_lst[i], len);
 		ft_strlcat(path, "/", len);
 		ft_strlcat(path, cmd, len);
 		if (!access(path, X_OK))
-		{
-			free_string_array(path_lst);
-			return (path);
-		}
+			return (free_string_array(path_lst), path);
 		free(path);
-		i++;
 	}
-	free_string_array(path_lst);
-	return (NULL);
+	return (free_string_array(path_lst), NULL);
 }
