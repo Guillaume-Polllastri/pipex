@@ -48,6 +48,11 @@ static void	setup_last_process(t_child *child, t_pipe *pipefd, t_info *info,
 	child[i].in = pipefd[i - 1].fd[0];
 	child[i].out = open(info->arg[info->last_file],
 			O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (child[i].out == -1)
+	{
+		perror("Error opening output file");
+		exit(EXIT_FAILURE);
+	}
 	execute_cmd(&child[i], info);
 }
 
@@ -77,8 +82,10 @@ void	create_processes(t_child *child, t_pipe *pipefd, t_info *info)
 			setup_middle_process(child, pipefd, info, i);
 		if (child[i].pid != 0)
 		{
-			close(child[i].in);
-			close(child[i].out);
+			if (child[i].in >= 0)
+				close(child[i].in);
+			if (child[i].out >= 0)
+				close(child[i].out);
 		}
 		info->index_cmd++;
 		i++;

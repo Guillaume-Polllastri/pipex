@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:24:01 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 09:56:26 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/22 16:16:16 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static ssize_t	write_buffer(int fd, char **buffer)
 	ssize_t	status;
 
 	tmp = (char *) ft_calloc(BUFFER_SIZE + 1, sizeof(*tmp));
+	if (!tmp)
+		return (-1);
 	status = read(fd, tmp, BUFFER_SIZE);
 	if (!*buffer && status > 0)
 		*buffer = tmp;

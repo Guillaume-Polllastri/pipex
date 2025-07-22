@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 14:08:53 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 15:36:12 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/22 16:23:18 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ char	*cmd_path(t_info *info, char *cmd)
 	if (!res)
 		return (NULL);
 	if (cmd[0] == '/')
-		path = cmd;
+		path = ft_strdup(cmd);
 	else
 		path = path_env(my_getenv(info), res[0]);
+	free_string_array(res);
 	if (!path)
 		return (NULL);
-	free_string_array(res);
 	return (path);
 }
 
@@ -71,11 +71,18 @@ char	*path_env(char *str, char *cmd)
 	int		i;
 
 	path_lst = ft_split(str, ":");
+	if (!path_lst)
+		return (NULL);
 	i = 0;
 	while (path_lst[i])
 	{
 		len = ft_strlen(path_lst[i]) + 1 + ft_strlen(cmd) + 1;
 		path = malloc(sizeof(char) * len);
+		if (!path)
+		{
+			free_string_array(path_lst);
+			return (NULL);
+		}
 		ft_bzero(path, len);
 		ft_strlcat(path, path_lst[i], len);
 		ft_strlcat(path, "/", len);
@@ -88,5 +95,6 @@ char	*path_env(char *str, char *cmd)
 		free(path);
 		i++;
 	}
+	free_string_array(path_lst);
 	return (NULL);
 }
