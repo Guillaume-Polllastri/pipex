@@ -6,7 +6,7 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/04 10:53:47 by gpollast          #+#    #+#              #
-#    Updated: 2025/07/22 10:31:05 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/22 17:13:26 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = pipex
 SRC = 	src/main.c \
 		src/parse.c \
 		src/process.c \
+		src/process_utils.c \
 		src/fork.c \
 		src/get_next_line.c
 
