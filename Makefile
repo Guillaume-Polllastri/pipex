@@ -6,7 +6,7 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/04 10:53:47 by gpollast          #+#    #+#              #
-#    Updated: 2025/07/21 13:31:49 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/22 10:31:05 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = pipex
 SRC = 	src/main.c \
 		src/parse.c \
 		src/process.c \
-		src/fork.c
+		src/fork.c \
+		src/get_next_line.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -26,7 +27,7 @@ LDFLAGS = -L./libft -lft -L./ft_printf -lftprintf
 all: libft/libft.a ft_printf/libftprintf.a $(NAME)
 
 libft/libft.a:
-	@$(MAKE) -C libft
+	@$(MAKE) -C libft bonus
 
 ft_printf/libftprintf.a:
 	@$(MAKE) -C ft_printf

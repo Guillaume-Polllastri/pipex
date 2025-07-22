@@ -6,13 +6,22 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 14:08:53 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/16 15:52:23 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:36:12 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "pipex.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "ft_printf.h"
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include "get_next_line.h"
 
-char	*cmd_path(char *cmd)
+char	*cmd_path(t_info *info, char *cmd)
 {
 	char	**res;
 	char	*path;
@@ -20,9 +29,64 @@ char	*cmd_path(char *cmd)
 	res = ft_split(cmd, " \t");
 	if (!res)
 		return (NULL);
-	path = ft_strjoin("/bin/", res[0]);
+	if (cmd[0] == '/')
+		path = cmd;
+	else
+		path = path_env(my_getenv(info), res[0]);
 	if (!path)
 		return (NULL);
 	free_string_array(res);
 	return (path);
+}
+
+size_t	ft_strlen_no_nl(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	return (i);
+}
+
+char	*my_getenv(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->env[i])
+	{
+		if (!ft_strncmp(info->env[i], "PATH=", ft_strlen("PATH=")))
+			return (info->env[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*path_env(char *str, char *cmd)
+{
+	char	**path_lst;
+	char	*path;
+	int 	len;
+	int		i;
+
+	path_lst = ft_split(str, ":");
+	i = 0;
+	while (path_lst[i])
+	{
+		len = ft_strlen(path_lst[i]) + 1 + ft_strlen(cmd) + 1;
+		path = malloc(sizeof(char) * len);
+		ft_bzero(path, len);
+		ft_strlcat(path, path_lst[i], len);
+		ft_strlcat(path, "/", len);
+		ft_strlcat(path, cmd, len);
+		if (!access(path, X_OK))
+		{
+			free_string_array(path_lst);
+			return (path);
+		}
+		free(path);
+		i++;
+	}
+	return (NULL);
 }

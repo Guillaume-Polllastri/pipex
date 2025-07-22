@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/21 20:43:56 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:32:05 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "get_next_line.h"
 
 void	execute_cmd(t_child *child, t_info *info)
 {
@@ -54,23 +55,39 @@ void	free_child(t_child *child)
 
 static void	execute_heredoc(t_info *info)
 {
-	(void)info;
-}
+	t_list	*lst;
+	char	*line;
 
-#define BUFFER_SIZE 4096
+	line = get_next_line(0);
+	if (!line)
+		return ;
+	while (ft_strncmp(line, info->arg[2], ft_strlen_no_nl(line)) != 0)
+	{
+		ft_lstadd_back(&lst, ft_lstnew(line));
+		line = get_next_line(0);
+	}
+	while (lst)
+	{
+		write(1, lst->content, ft_strlen(lst->content));
+		lst = lst->next;
+	}
+	exit(0);
+}
 
 static void	execute_read_file(t_info *info)
 {
 	int		fd;
-	char	buffer[BUFFER_SIZE];
+	char	buffer[BUFFER_SIZE2];
 	int		len;
 
 	fd = open(info->arg[1], O_RDONLY);
-	len = read(fd, buffer, BUFFER_SIZE);
+	if (!fd)
+		exit(EXIT_FAILURE);
+	len = read(fd, buffer, BUFFER_SIZE2);
 	while (len > 0)
 	{
 		write(1, buffer, len);
-		len = read(fd, buffer, BUFFER_SIZE);
+		len = read(fd, buffer, BUFFER_SIZE2);
 	}
 	close(fd);
 	exit(0);
@@ -90,7 +107,8 @@ static t_child	*setup_childs(t_info *info)
 	i = 0;
 	while (i < info->nb_cmd)
 	{
-		children[i + 1].path_cmd = cmd_path(info->arg[info->index_cmd + i]);
+		children[i + 1].path_cmd = cmd_path(info,
+				info->arg[info->index_cmd + i]);
 		children[i + 1].cmd = ft_split(info->arg[info->index_cmd + i], " \t");
 		i++;
 	}
@@ -111,7 +129,8 @@ void	parent(t_info *info)
 	while (i < info->nb_cmd)
 	{
 		waitpid(children[i].pid, &children[i].status, 0);
-		ft_printf("Enfant %d a terminé avec status : %d\n", i, children[i].status);
+		ft_printf("Enfant %d a terminé avec status : %d\n", i,
+			children[i].status);
 		i++;
 	}
 	ft_printf("Les Enfants ont été crées\n");
