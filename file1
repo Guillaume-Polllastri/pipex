@@ -1,2 +1,12 @@
-Info: test data
-Some other content
+Info: Initialisation du système en cours...
+Info: Connexion à la base de données réussie.
+Error: Impossible de charger le fichier de configuration 'config.yaml'.
+Info: Tentative de reconnexion dans 5 secondes.
+Success: Reconnexion établie avec succès.
+Info: Vérification des permissions de l'utilisateur.
+Error: Accès refusé pour l'utilisateur 'guest'.
+Info: Envoi du rapport journalier au serveur distant.
+Success: Rapport envoyé correctement à 14:03.
+Error: Temps de réponse du serveur trop long (> 10s).
+Info: Processus de sauvegarde automatique démarré.
+Success: Sauvegarde terminée à 14:17 sans erreur.

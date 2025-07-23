@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 13:28:12 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 10:45:52 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:27:39 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	setup_first_process(t_child *child, t_pipe *pipefd, t_info *info,
 {
 	child[i].in = -1;
 	child[i].out = pipefd[i].fd[1];
-	execute_cmd(&child[i], info);
+	execute_cmd(&child[i], info, pipefd);
 }
 
 static void	setup_last_process(t_child *child, t_pipe *pipefd, t_info *info,
@@ -57,7 +57,7 @@ static void	setup_last_process(t_child *child, t_pipe *pipefd, t_info *info,
 		perror("Error\nOpening output file ");
 		exit(EXIT_FAILURE);
 	}
-	execute_cmd(&child[i], info);
+	execute_cmd(&child[i], info, pipefd);
 }
 
 static void	setup_middle_process(t_child *child, t_pipe *pipefd, t_info *info,
@@ -65,7 +65,7 @@ static void	setup_middle_process(t_child *child, t_pipe *pipefd, t_info *info,
 {
 	child[i].in = pipefd[i - 1].fd[0];
 	child[i].out = pipefd[i].fd[1];
-	execute_cmd(&child[i], info);
+	execute_cmd(&child[i], info, pipefd);
 }
 
 void	create_processes(t_child *child, t_pipe *pipefd, t_info *info)
@@ -78,18 +78,14 @@ void	create_processes(t_child *child, t_pipe *pipefd, t_info *info)
 		child[i].pid = fork();
 		if (child[i].pid == -1)
 			return (perror("Error\nfork "));
-		if (i == 0)
-			setup_first_process(child, pipefd, info, i);
-		else if (i == (info->nb_cmd))
-			setup_last_process(child, pipefd, info, i);
-		else
-			setup_middle_process(child, pipefd, info, i);
-		if (child[i].pid != 0)
+		if (child[i].pid == 0)
 		{
-			if (child[i].in >= 0)
-				close(child[i].in);
-			if (child[i].out >= 0)
-				close(child[i].out);
+			if (i == 0)
+				setup_first_process(child, pipefd, info, i);
+			else if (i == (info->nb_cmd))
+				setup_last_process(child, pipefd, info, i);
+			else
+				setup_middle_process(child, pipefd, info, i);
 		}
 		info->index_cmd++;
 		i++;

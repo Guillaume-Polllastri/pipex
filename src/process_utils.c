@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 17:20:00 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 11:12:14 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:35:36 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@ void	wait_children(t_child *children, int nb_cmd)
 	while (i < nb_cmd)
 	{
 		waitpid(children[i].pid, &children[i].status, 0);
-		ft_printf("Child %d has finished with status : %d\n", i,
-			children[i].status);
 		i++;
 	}
-	ft_printf("Children have been created\n");
 }
 
 void	cleanup_children(t_child *children, int nb_cmd)

@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 11:25:22 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:36:36 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,27 @@
 #include <fcntl.h>
 #include "get_next_line.h"
 
-void	execute_cmd(t_child *child, t_info *info)
+void	close_unused_pipes(t_pipe *pipefd, int nb_cmd, int keep_read,
+		int keep_write)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb_cmd)
+	{
+		if (pipefd[i].fd[0] != keep_read)
+			close(pipefd[i].fd[0]);
+		if (pipefd[i].fd[1] != keep_write)
+			close(pipefd[i].fd[1]);
+		i++;
+	}
+}
+
+void	execute_cmd(t_child *child, t_info *info, t_pipe *pipefd)
 {
 	if (child->pid == 0)
 	{
+		close_unused_pipes(pipefd, info->nb_cmd, child->in, child->out);
 		if (child->in >= 0)
 		{
 			dup2(child->in, STDIN_FILENO);
@@ -38,6 +55,9 @@ void	execute_cmd(t_child *child, t_info *info)
 		if (child->path_cmd)
 		{
 			execve(child->path_cmd, child->cmd, info->env);
+			// Si execve échoue, libérer la mémoire avant exit
+			free(child->path_cmd);
+			free_string_array(child->cmd);
 			perror("Error\nCommand execution failed");
 			exit(EXIT_FAILURE);
 		}

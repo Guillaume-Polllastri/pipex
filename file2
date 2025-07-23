@@ -1,1 +1,19 @@
-15
+total 92
+drwxr-xr-x 7 gpollast 2025_paris   232 Jul 23 16:36 .
+drwxr-xr-x 7 gpollast 2025_paris    95 Jul 23 14:30 ..
+-rw-r--r-- 1 gpollast 2025_paris     2 Jul 23 16:28 expected
+-rw-r--r-- 1 gpollast 2025_paris    12 Jul 23 14:30 file
+-rw-r--r-- 1 gpollast 2025_paris    13 Jul 23 16:26 file1
+-rw-r--r-- 1 gpollast 2025_paris     0 Jul 23 16:37 file2
+-rw-r--r-- 1 gpollast 2025_paris   204 Jul 23 14:30 file3
+drwxr-xr-x 2 gpollast 2025_paris  4096 Jul 23 16:29 ft_printf
+drwxr-xr-x 8 gpollast 2025_paris   185 Jul 23 14:41 .git
+-rw-r--r-- 1 gpollast 2025_paris    11 Jul 23 14:30 .gitignore
+drwxr-xr-x 2 gpollast 2025_paris    44 Jul 23 14:30 includes
+-rw-r--r-- 1 gpollast 2025_paris     5 Jul 23 16:36 infile
+drwxr-xr-x 2 gpollast 2025_paris  4096 Jul 23 16:29 libft
+-rw-r--r-- 1 gpollast 2025_paris  1803 Jul 23 14:30 Makefile
+-rw-r--r-- 1 gpollast 2025_paris     2 Jul 23 16:36 outfile
+-rwxr-xr-x 1 gpollast 2025_paris 42472 Jul 23 16:36 pipex
+-rw-r--r-- 1 gpollast 2025_paris     2 Jul 23 16:28 result
+drwxr-xr-x 2 gpollast 2025_paris   218 Jul 23 16:36 src

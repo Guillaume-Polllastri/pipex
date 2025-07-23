@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:55:01 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 17:13:26 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:48:16 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*cmd_path(t_info *info, char *cmd);
 void	parent(t_info *info);
 void	create_pipes(t_pipe *pipefd, int nb_cmd);
 void	create_processes(t_child *child, t_pipe *pipefd, t_info *info);
-void	execute_cmd(t_child *child, t_info *info);
+void	execute_cmd(t_child *child, t_info *info, t_pipe *pipefd);
 void	free_child(t_child *child);
 void	close_pipes(t_pipe *pipefd, int nb_cmd);
 void	wait_children(t_child *children, int nb_cmd);
@@ -55,5 +55,7 @@ t_child	*setup_childs(t_info *info);
 size_t	ft_strlen_no_nl(const char *str);
 char	*my_getenv(t_info *info);
 char	*path_env(char *str, char *cmd);
+void	close_unused_pipes(t_pipe *pipefd, int nb_cmd, int keep_read,
+			int keep_write);
 
 #endif
