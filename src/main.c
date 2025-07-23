@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:54:05 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 23:56:46 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:33:49 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 
 static int	check_file_permissions(char **av, int ac)
 {
-	if (!access(av[ac - 1], F_OK) && access(av[ac - 1], W_OK | R_OK))
+	if (!access(av[ac - 1], F_OK) && access(av[ac - 1], W_OK))
 		return (write(2, "Error\nNo permissions on file2\n", 30), 1);
 	if (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
 	{
 		if (access(av[1], F_OK))
 			return (write(2, "Error\nThe first file doesn't exist\n", 35), 1);
-		if (access(av[1], W_OK | R_OK))
+		if (access(av[1], R_OK))
 			return (write(2, "Error\nNo permissions on file1\n", 30), 1);
 	}
 	return (0);
