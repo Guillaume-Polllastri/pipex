@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 14:08:53 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 00:07:16 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:05:05 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*cmd_path(t_info *info, char *cmd)
 	if (!res)
 		return (NULL);
 	if (cmd[0] == '/')
-		path = ft_strdup(cmd);
+		path = ft_strdup(res[0]);
 	else
 		path = path_env(my_getenv(info), res[0]);
 	free_string_array(res);

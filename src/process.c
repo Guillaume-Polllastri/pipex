@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 17:18:03 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 10:46:11 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	parent(t_info *info)
 	pipefd = malloc(sizeof(t_pipe) * (info->nb_cmd));
 	if (!pipefd)
 	{
-		perror("Error allocating memory for pipes");
+		perror("Error\nAllocating memory for pipes ");
 		exit(EXIT_FAILURE);
 	}
 	create_pipes(pipefd, info->nb_cmd);

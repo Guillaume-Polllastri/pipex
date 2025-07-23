@@ -13,7 +13,7 @@
 NAME = libft.a
 CC = cc
 AR = ar
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fPIC
 
 SRCS =			ft_isalpha.c \
 				ft_isdigit.c \

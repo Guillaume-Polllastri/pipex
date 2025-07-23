@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 13:28:12 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 19:00:22 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 10:45:52 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	create_pipes(t_pipe *pipefd, int nb_cmd)
 	while (i < nb_cmd)
 	{
 		if (pipe(pipefd[i].fd) == -1)
-			return (perror("pipe"));
+			return (perror("Error\nPipe "));
 		i++;
 	}
 }
@@ -54,7 +54,7 @@ static void	setup_last_process(t_child *child, t_pipe *pipefd, t_info *info,
 				O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (child[i].out == -1)
 	{
-		perror("Error opening output file");
+		perror("Error\nOpening output file ");
 		exit(EXIT_FAILURE);
 	}
 	execute_cmd(&child[i], info);
@@ -77,7 +77,7 @@ void	create_processes(t_child *child, t_pipe *pipefd, t_info *info)
 	{
 		child[i].pid = fork();
 		if (child[i].pid == -1)
-			return (perror("fork"));
+			return (perror("Error\nfork "));
 		if (i == 0)
 			setup_first_process(child, pipefd, info, i);
 		else if (i == (info->nb_cmd))

@@ -6,14 +6,14 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/27 20:41:38 by gpollast          #+#    #+#              #
-#    Updated: 2025/05/19 16:14:24 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/23 09:32:26 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 CC = cc
 AR = ar
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fPIC
 
 SRCS =		ft_printf.c \
 			ft_putadress.c \

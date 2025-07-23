@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 17:20:00 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/22 23:56:36 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 09:30:50 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	wait_children(t_child *children, int nb_cmd)
 	while (i < nb_cmd)
 	{
 		waitpid(children[i].pid, &children[i].status, 0);
-		ft_printf("Enfant %d a terminé avec status : %d\n", i,
+		ft_printf("Child %d has finished with status : %d\n", i,
 			children[i].status);
 		i++;
 	}
-	ft_printf("Les Enfants ont été crées\n");
+	ft_printf("Children have been created\n");
 }
 
 void	cleanup_children(t_child *children, int nb_cmd)
@@ -97,7 +97,7 @@ t_child	*setup_childs(t_info *info)
 	children = malloc(sizeof(t_child) * (info->nb_cmd + 1));
 	if (!children)
 	{
-		perror("Error allocating memory for children");
+		perror("Error\nAllocating memory for children\n");
 		exit(EXIT_FAILURE);
 	}
 	ft_bzero(children, sizeof(t_child) * (info->nb_cmd + 1));
