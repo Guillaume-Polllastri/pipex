@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 16:36:36 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:45:51 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +42,8 @@ void	execute_cmd(t_child *child, t_info *info, t_pipe *pipefd)
 	if (child->pid == 0)
 	{
 		close_unused_pipes(pipefd, info->nb_cmd, child->in, child->out);
-		if (child->in >= 0)
-		{
-			dup2(child->in, STDIN_FILENO);
-			close(child->in);
-		}
-		if (child->out >= 0)
-		{
-			dup2(child->out, STDOUT_FILENO);
-			close(child->out);
-		}
-		if (child->path_cmd)
-		{
-			execve(child->path_cmd, child->cmd, info->env);
-			// Si execve échoue, libérer la mémoire avant exit
-			free(child->path_cmd);
-			free_string_array(child->cmd);
-			perror("Error\nCommand execution failed");
-			exit(EXIT_FAILURE);
-		}
-		else if (child->f)
-		{
-			child->f(info);
-		}
-		else
-		{
-			perror("Error\nCommand is invalid");
-			exit(127);
-		}
+		setup_redirections(child);
+		exec_command(child, info);
 	}
 }
 

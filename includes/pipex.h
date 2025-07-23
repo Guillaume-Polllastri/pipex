@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:55:01 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 14:48:16 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:45:51 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,7 @@ char	*my_getenv(t_info *info);
 char	*path_env(char *str, char *cmd);
 void	close_unused_pipes(t_pipe *pipefd, int nb_cmd, int keep_read,
 			int keep_write);
+void	setup_redirections(t_child *child);
+void	exec_command(t_child *child, t_info *info);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/04 10:53:47 by gpollast          #+#    #+#              #
-#    Updated: 2025/07/23 13:46:10 by gpollast         ###   ########.fr        #
+#    Updated: 2025/07/23 16:45:51 by gpollast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRC = 	src/main.c \
 		src/parse.c \
 		src/process.c \
 		src/process_utils.c \
+		src/command_utils.c \
 		src/fork.c \
 		src/get_next_line.c
 
