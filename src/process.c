@@ -6,7 +6,7 @@
 /*   By: gpollast <gpollast@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:41:31 by gpollast          #+#    #+#             */
-/*   Updated: 2025/07/23 10:46:11 by gpollast         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:25:22 by gpollast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,20 @@ void	execute_cmd(t_child *child, t_info *info)
 			close(child->out);
 		}
 		if (child->path_cmd)
+		{
 			execve(child->path_cmd, child->cmd, info->env);
-		else
+			perror("Error\nCommand execution failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (child->f)
+		{
 			child->f(info);
-		perror("Error\nCommand is invalid ");
-		exit(EXIT_FAILURE);
+		}
+		else
+		{
+			perror("Error\nCommand is invalid");
+			exit(127);
+		}
 	}
 }
 
